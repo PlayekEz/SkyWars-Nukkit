@@ -1,0 +1,8 @@
+name: SkyWars
+main: nl.sw.jose.main.SkyWars
+api: 1.0.8
+version: 1.0
+author: Josewowgame
+commands:
+ sw:
+  description: "SW command"
