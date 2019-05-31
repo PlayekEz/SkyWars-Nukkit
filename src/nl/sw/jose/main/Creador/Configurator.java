@@ -2,7 +2,7 @@ package nl.sw.jose.main.Creador;
 
 public class Configurator {
 public static String owner = "";
-public static int  MODE_TYPE_FULT = 0;
+public const int  MODE_TYPE_FULT = 0;
 public static String arena = "";
 public void setMode(int type){
 	MODE_TYPE_FULT = type;
