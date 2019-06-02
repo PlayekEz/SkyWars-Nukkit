@@ -259,7 +259,7 @@ public void atacar(EntityDamageEvent  evento){
     	          if(evento.getCause() == DamageCause.MAGIC){
     	        	
     	       	   for(Player d :sw.getServer().getLevelByName(arena.getString("level")).getPlayers().values()){
-    	       		   d.sendMessage(Settings.title+"§c"+player.getName()+" §emuro por jugar al mago"); 
+    	       		   d.sendMessage(Settings.title+"§c"+player.getName()+" §emurio por jugar al mago"); 
     	       		   d.sendTip("§e"+this.countPlayersGM(w)+" §arestantes");
     	       		   sw.getServer().getLevelByName(arena.getString("level")).addSound(new Vector3(d.x,d.y,d.z), Sound.MOB_CAT_HIT);
     	       		     }
@@ -306,7 +306,7 @@ public void atacar(EntityDamageEvent  evento){
     	          if(evento.getCause() == DamageCause.DROWNING){
     
     	       	   for(Player d :sw.getServer().getLevelByName(arena.getString("level")).getPlayers().values()){
-    	       		   d.sendMessage(Settings.title+"§c"+player.getName()+" §eno sabi nadar"); 
+    	       		   d.sendMessage(Settings.title+"§c"+player.getName()+" §eno sabia nadar"); 
     	       		   sw.getServer().getLevelByName(arena.getString("level")).addSound(new Vector3(d.x,d.y,d.z), Sound.MOB_CAT_HIT);
     	       		   d.sendTip("§e"+this.countPlayersGM(w)+" §arestantes");
     	       		     }
@@ -477,7 +477,12 @@ public void antiPVP(EntityDamageByEntityEvent e){
 			if(arena.getInt("start") > 0){
 				e.setCancelled(true);
 			}else{
-				e.setCancelled(false);	
+				if(arena.getInt("time") > 475){
+					e.setCancelled(true);
+				}else{
+					e.setCancelled(false);	
+				}
+				
 			}	
 		}
 	}

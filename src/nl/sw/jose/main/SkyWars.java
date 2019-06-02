@@ -1,5 +1,7 @@
 package nl.sw.jose.main;
 import cn.nukkit.Player;
+import nl.sw.jose.main.Signs.UpdateSign;
+import nl.sw.jose.main.Signs.register;
 import nl.sw.jose.main.Portal;
 import nl.sw.jose.main.ResetMap;
 import nl.sw.jose.main.Arenas;
@@ -53,10 +55,12 @@ this.loadArenas();
 public void getSchedulersGame(){
 	this.getServer().getScheduler().scheduleRepeatingTask(new ProtocolUpdate(this), 5);
 	this.getServer().getScheduler().scheduleRepeatingTask(new GameTask(this), 20);
+	this.getServer().getScheduler().scheduleRepeatingTask(new UpdateSign(this), 10);
 }
 public void getEvent(){
 	this.getServer().getPluginManager().registerEvents(new Putty(this), this);
 	this.getServer().getPluginManager().registerEvents(new Arenas(this), this);
+	this.getServer().getPluginManager().registerEvents(new register(this), this);
 }
 public void resetmap(String name){
 	String kolu = name.replace(".dat", "");
@@ -334,7 +338,7 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 			player.sendMessage("§6usage : /sw islapos {id} {isla} {pos}");
 			player.sendMessage("§6usage : /sw lobbypos {id} {pos}");
 			player.sendMessage("§6usage : /sw chest {id} {pos}");
-			player.sendMessage("§6usage : /sw savemap {name} (off)");
+			player.sendMessage("§6usage : /sw savemap {name} (no found)");
 			player.sendMessage("§6usage : /sw save {id}");
 			player.sendMessage("§6usage : /sw edit {level}");
 			player.sendMessage("§6usage : /sw cancel");
@@ -363,29 +367,7 @@ public boolean onCommand(CommandSender sender, Command command, String label, St
 	 return false;
 }
 
-public void setPlayersArena(){
-	int total;
-	if(this.countArchivos() > 0){
-		total = 0;
-		String[] games = new File(this.getDataFolder()+"/Arenas/").list();
-		for(String w : games){
-		Config game = new Config(this.getDataFolder()+"/Arenas/"+w,Config.YAML);
-	for(Player p : this.getServer().getLevelByName(game.getString("level")).getPlayers().values()){
-		if(p.getGamemode() == 2){
-			total++;
-			
-		}
-		if(p.getGamemode() == 0){
-			total++;
-			
-		}
-	}
-		}
-	}else{
-		total = 0;
-	}
-	playersarena = total;
-}
+
 public void setFood(Player player,int food){
 	UpdateAttributesPacket upk = new UpdateAttributesPacket();
 	upk.entityId = player.getId();
@@ -436,28 +418,28 @@ public String getBossText(Player player, String name){
 	String text = "";
 	Config game = new Config(this.getDataFolder()+"/Arenas/"+name,Config.YAML);
 	int jugadores = this.getServer().getLevelByName(game.getString("level")).getPlayers().size();
-	String br = "\n";
 	if(game.getString("status").equals("on") && jugadores <2 && game.getInt("start") >0){
-		text = "       §l§aSkyWars§r"+br+br+"§bBuscando§e 1 §bJugador§a..";
+		text = "§bBuscando§e 1 §bJugador§a..";
 	}
 	if(game.getString("status").equals("on") && jugadores >= 2 && game.getInt("start") >10){
-		text = "           §l§aSkyWars§r"+br+br+"§bComenzando en §9: §a"+game.getInt("start")+" §bsegundos";
+		text = "§bComenzando en §9: §a"+game.getInt("start")+" §bsegundos";
 	}
 	if(game.getString("status").equals("off") && jugadores >= 2 && game.getInt("start") >0){
-		text = "           §l§aSkyWars§r"+br+br+"§bComenzando en §9: §a"+game.getInt("start")+" §bsegundos";
+		text = "§bComenzando en §9: §a"+game.getInt("start")+" §bsegundos";
 	}
 	if(game.getString("status").equals("off") && jugadores >= 2 && game.getInt("start") == 0){
-		text = "    §l§aSkyWars§r"+br+br+"§bTermina en §9: §a"+this.getReloj(game.getInt("time"));
+		text = "§bTermina en §9: §a"+this.getReloj(game.getInt("time"));
 	}
 	if(game.getString("status").equals("reset") && game.getInt("start") == 0){
-		text = br+br+"§bTerminando partida §a: §e"+game.getInt("reset");
+		text = "§bTerminando partida §a: §e"+game.getInt("reset");
 	}
 	return text;
 }
 public void updateboss(Player player,String name){
-	Config game = new Config(this.getDataFolder()+"/Arenas/"+name,Config.YAML);
-	Boss.sendTitle(player, game.getInt("boss"), this.getBossText(player, name));
-	Boss.setVida(player, game.getInt("boss"), 100);
+	//Config game = new Config(this.getDataFolder()+"/Arenas/"+name,Config.YAML);
+	//Boss.sendTitle(player, game.getInt("boss"), this.getBossText(player, name));
+	//Boss.setVida(player, game.getInt("boss"), 100);//boss no auth
+	player.sendTip(this.getBossText(player, name));
 }
 
 public void sendBoss(){

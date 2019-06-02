@@ -11,15 +11,16 @@ public ProtocolUpdate(SkyWars plugin){
 
 @Override
 public void onRun(int tick) {
-	sw.setPlayersArena();
 	sw.sendBoss();
 	sw.system();
 	for(Level lv : sw.getServer().getLevels().values()){
-		for(Entity ffagame : lv.getEntities()){
-			if(ffagame instanceof SWEntity){
-				ffagame.setNameTag(sw.getNameNPC());
-				ffagame.setNameTagAlwaysVisible(true);
-				ffagame.setNameTagVisible(true);
+		for(Entity swa : lv.getEntities()){
+			if(swa instanceof SWEntity){
+				swa.setNameTag(sw.getNameNPC());
+				swa.setNameTagAlwaysVisible(true);
+				swa.setNameTagVisible(true);
+				swa.setScale((float)0.01);
+				
 			}
 		}
 	}
